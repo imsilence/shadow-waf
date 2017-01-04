@@ -4,7 +4,7 @@
 
 1. 使用openresty或者ngx_lua web服务器
 
-2. 参看 conf/nginx.conf 将配置waf_http.conf和waf_server.conf配置在web服务器中
+2. 参看conf/nginx.conf配置waf_http.conf和waf_server.conf到web服务器中
 
 3. 将 datas, lua部署到nginx启动prefix路径下
 
