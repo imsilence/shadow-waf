@@ -89,7 +89,7 @@ class="active"
                             </select>
                         </div>
                         <div class="col-sm-5">
-                            <input type="text" class="form-control" name="target">
+                            <input type="text" class="form-control" name="target" value="*"/>
                         </div>
                         <div class="col-sm-1" style="padding-top: 8px;">
                             <a href="javascript:void(0);" class="btn-condition-create" data-idx='0'><i class="fa fa-plus"></i></a>
@@ -204,7 +204,7 @@ class="active"
             </select>
         </div>
         <div class="col-sm-5">
-            <input type="text" class="form-control" name="target">
+            <input type="text" class="form-control" name="target" value="*"/>
         </div>
         <div class="col-sm-1" style="padding-top: 8px;">
             <a href="javascript:void(0);" class="btn-condition-create" data-idx='%1%'><i class="fa fa-plus"></i></a>
@@ -285,6 +285,12 @@ jQuery(document).ready(function() {
     });
 
     jQuery('.btn-create').on('click', function() {
+        var form = jQuery('.form-create');
+        var bootstrapValidator = form.data('bootstrapValidator');
+        if(bootstrapValidator) {
+            bootstrapValidator.resetForm();
+        }
+
         jQuery('#dialog-create div.row[data-idx!=0]').remove();
         jQuery('#dialog-create').modal({
             'backdrop' : 'static',
@@ -293,7 +299,16 @@ jQuery(document).ready(function() {
     });
 
     jQuery('.btn-save').on('click', function() {
-        var params = jQuery('.form-create').serializeArray();
+        var form = jQuery('.form-create');
+        var bootstrapValidator = form.data('bootstrapValidator');
+        if(bootstrapValidator) {
+            bootstrapValidator.validate();
+            if(!bootstrapValidator.isValid()) {
+                return false;
+            }
+        }
+
+        var params = form.serializeArray();
         jQuery.post('/waf/policy/create/?ptype=object', params, function(response) {
             if(response['code'] == 200) {
                 jQuery('#dialog-create').modal('hide');
@@ -316,6 +331,12 @@ jQuery(document).ready(function() {
     });
 
     jQuery('.table-policy').on('click', '.btn-view', function() {
+        var form = jQuery('.form-modify');
+        var bootstrapValidator = form.data('bootstrapValidator');
+        if(bootstrapValidator) {
+            bootstrapValidator.resetForm();
+        }
+
         var id = jQuery(this).data('id');
         jQuery.get('/waf/policy/view/?ptype=object', {'id' : id}, function(response) {
             if(response['code'] == 200) {
@@ -380,7 +401,16 @@ jQuery(document).ready(function() {
     });
 
     jQuery('.btn-modify').on('click', function() {
-        var params = jQuery('.form-modify').serializeArray();
+        var form = jQuery('.form-modify');
+        var bootstrapValidator = form.data('bootstrapValidator');
+        if(bootstrapValidator) {
+            bootstrapValidator.validate();
+            if(!bootstrapValidator.isValid()) {
+                return false;
+            }
+        }
+
+        var params = form.serializeArray();
         jQuery.post('/waf/policy/modify/?ptype=object', params, function(response) {
             if(response['code'] == 200) {
                 jQuery('#dialog-view').modal('hide');
@@ -418,6 +448,34 @@ jQuery(document).ready(function() {
         var condition = jQuery(this).parent().parent();
         condition.find('select').chosen('destroy');
         condition.remove();
+    });
+
+    jQuery('form').bootstrapValidator({
+        message: '输入不正确',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            name: {
+                message: '名称输入不正确',
+                validators: {
+                    notEmpty: {
+                        message: '名称不能为空'
+                    },
+                    stringLength: {
+                        min: 6,
+                        max: 30,
+                        message: '名称必须为6到30个字符'
+                    },
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_]+$/,
+                        message: '名称只能由大小写英文字母、数字、下划线组成'
+                    }
+                }
+            }
+        }
     });
 });
 {-js-}

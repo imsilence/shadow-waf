@@ -272,6 +272,11 @@ jQuery(document).ready(function() {
     });
 
     jQuery('.btn-create').on('click', function() {
+        var form = jQuery('.form-create');
+        var bootstrapValidator = form.data('bootstrapValidator');
+        if(bootstrapValidator) {
+            bootstrapValidator.resetForm();
+        }
         jQuery.get('/waf/policy/list/?ptype=object', {}, function(response) {
             if(response['data']) {
                 var objects = response['data'];
@@ -294,7 +299,15 @@ jQuery(document).ready(function() {
     });
 
     jQuery('.btn-save').on('click', function() {
-        var params = jQuery('.form-create').serializeArray();
+        var form = jQuery('.form-create');
+        var bootstrapValidator = form.data('bootstrapValidator');
+        if(bootstrapValidator) {
+            bootstrapValidator.validate();
+            if(!bootstrapValidator.isValid()) {
+                return false;
+            }
+        }
+        var params = form.serializeArray();
         jQuery.post('/waf/policy/create/?ptype=frequency', params, function(response) {
             if(response['code'] == 200) {
                 jQuery('#dialog-create').modal('hide');
@@ -318,6 +331,11 @@ jQuery(document).ready(function() {
 
 
     jQuery('.table-policy').on('click', '.btn-view', function() {
+        var form = jQuery('.form-modify');
+        var bootstrapValidator = form.data('bootstrapValidator');
+        if(bootstrapValidator) {
+            bootstrapValidator.resetForm();
+        }
         var id = jQuery(this).data('id');
         jQuery.get('/waf/policy/view/?ptype=frequency', {'id' : id}, function(presponse) {
             if(presponse['code'] == 200) {
@@ -379,7 +397,16 @@ jQuery(document).ready(function() {
 
 
     jQuery('.btn-modify').on('click', function() {
-        var params = jQuery('.form-modify').serializeArray();
+        var form = jQuery('.form-modify');
+        var bootstrapValidator = form.data('bootstrapValidator');
+        if(bootstrapValidator) {
+            bootstrapValidator.validate();
+            if(!bootstrapValidator.isValid()) {
+                return false;
+            }
+        }
+
+        var params = form.serializeArray();
         jQuery.post('/waf/policy/modify/?ptype=frequency', params, function(response) {
             if(response['code'] == 200) {
                 jQuery('#dialog-view').modal('hide');
@@ -388,6 +415,82 @@ jQuery(document).ready(function() {
                 alert(response['result']);
             }
         }, 'json');
+    });
+
+    jQuery('form').bootstrapValidator({
+        message: '输入不正确',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            name: {
+                message: '名称不正确',
+                validators: {
+                    notEmpty: {
+                        message: '名称不能为空'
+                    },
+                    stringLength: {
+                        min: 6,
+                        max: 30,
+                        message: '名称必须为6到30个字符'
+                    },
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_]+$/,
+                        message: '名称只能由大小写英文字母、数字、下划线组成'
+                    }
+                }
+            },
+            object: {
+                message: '条件对象不正确',
+                validators: {
+                    notEmpty: {
+                        message: '条件对象不能为空'
+                    }
+                }
+            },
+            keys: {
+                message: '合并对象不正确',
+                validators: {
+                    notEmpty: {
+                        message: '合并对象不能为空'
+                    }
+                }
+            },
+            interval: {
+                message: '时间间隔不正确',
+                validators: {
+                    notEmpty: {
+                        message: '时间间隔不能为空'
+                    },
+                    integer: {
+                       message: '时间间隔必须为整数'
+                    },
+                    between: {
+                        min: 10,
+                        max: 86400,
+                        message: '时间间隔必须为10到86400的整数'
+                    }
+                }
+            },
+            limit: {
+                message: '阈值不正确',
+                validators: {
+                    notEmpty: {
+                        message: '阈值不能为空'
+                    },
+                    integer: {
+                       message: '阈值必须为整数'
+                    },
+                    between: {
+                        min: 3,
+                        max: 1000,
+                        message: '时间间隔必须为3到1000的整数'
+                    }
+                }
+            }
+        }
     });
 });
 {-js-}

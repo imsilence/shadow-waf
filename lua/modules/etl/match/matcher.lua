@@ -21,6 +21,9 @@ _M.match = function(condition)
 end
 
 local _judge = function(value, operate, target, type)
+    if target == '*' then
+        return true
+    end
     if type == 'string' then
         value = tostring(value)
     elseif type == 'number' then
