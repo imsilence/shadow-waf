@@ -1,0 +1,353 @@
+{% layout='layout.html' %}
+
+{-link-}
+<link href="/waf/static/inspinia/css/plugins/dataTables/datatables.min.css" rel="stylesheet"/>
+<link href="/waf/static/inspinia/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+
+{-link-}
+
+{-nav_policy-}
+class="active"
+{-nav_policy-}
+
+{-nav_policy_behavior-}
+class="active"
+{-nav_policy_behavior-}
+
+{-nav_policy_redirect-}
+class="active"
+{-nav_policy_redirect-}
+
+{-breadcrumb-}
+<li>
+    <a href="javascript:void(0);">
+        策略
+    </a>
+</li>
+<li>
+    <a href="javascript:void(0);">
+        行为
+    </a>
+</li>
+<li>
+    <a class="active">
+        <strong>重定向</strong>
+    </a>
+</li>
+{-breadcrumb-}
+
+{-container-}
+<div style="float:left">
+    <button type="button" class="btn-create btn btn-w-m btn-primary btn-sm">创建</button>
+</div>
+<table class="table-policy table table-striped table-bordered talbe-hover">
+    <thead>
+        <tr>
+            <th class="col-md-2">名称</th>
+            <th class="col-md-2">对象</th>
+            <th class="col-md-2">重定向</th>
+            <th class="col-md-2">目标</th>
+            <th class="col-md-1">状态</th>
+            <th class="col-md-2">操作</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div class="modal fade" id="dialog-create" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">重定向</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal form-create">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">名称</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">重定向</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="uri" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">目标</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="target" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">状态</label>
+                <div class="col-sm-10">
+                    <div class="radio-inline">
+                        <input type="radio" name="enable" value="true" checked="checked" /> 启用
+                    </div>
+                    <div class="radio-inline">
+                        <input type="radio"  name="enable" value="false" /> 禁用
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">条件对象</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="object" data-placeholder="选择条件">
+                    </select>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary btn-save">创建</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="dialog-view" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">重定向</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal form-modify">
+            <input type="hidden" name="id" />
+            <div class="form-group">
+                <label class="col-sm-2 control-label">名称</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">条件对象</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="object" data-placeholder="选择条件">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">重定向</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="uri" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">目标</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="target" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">状态</label>
+                <div class="col-sm-10">
+                    <div class="radio-inline">
+                        <input type="radio" name="enable" value="true" checked="checked" /> 启用
+                    </div>
+                    <div class="radio-inline">
+                        <input type="radio"  name="enable" value="false" /> 禁用
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary btn-modify">更新</button>
+      </div>
+    </div>
+  </div>
+</div>
+{-container-}
+
+{-script-}
+<script src="/waf/static/inspinia/js/plugins/dataTables/datatables.min.js"></script>
+<script src="/waf/static/inspinia/js/plugins/chosen/chosen.jquery.js"></script>
+{-script-}
+
+{-js-}
+jQuery(document).ready(function() {
+
+    jQuery('select').chosen({width: "100%"});
+
+    var table = jQuery('.table-policy').DataTable({
+        "dom" : '<"top"f>rt<"bottom"lp><"clear">',
+        "ordering" : false,
+        "ajax": "/waf/policy/list/?ptype=redirect",
+        "columns": [
+            {"data": function(row) {return html_decode(row["name"]);}},
+            {"data": function(row) {return html_decode(row["object"]);}},
+            {"data": function(row) {return html_decode(row["uri"]);}},
+            {"data": function(row) {return html_decode(row["target"]);}},
+            {"data": function(row) {return html_decode(row["enable"]);}},
+            {
+                "data" : function(row) {
+                    var buttons = [];
+                    buttons.push('<button class="btn-view btn btn-warning btn-xs" data-id="%s">编辑</button>'.replace('%s', row['id']));
+                    buttons.push('<button class="btn-delete btn btn-danger btn-xs" data-id="%s">删除</button>'.replace('%s', row['id']));
+                    return buttons.join('&nbsp;');
+                }
+            }
+        ],
+        "language": {
+            "processing": "处理中...",
+            "lengthMenu": "显示 _MENU_ 项结果",
+            "zeroRecords": "没有匹配结果",
+            "info": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "infoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "infoFiltered": "(由 _MAX_ 项结果过滤)",
+            "infoPostFix": "",
+            "search": "搜索:",
+            "searchPlaceholder": "搜索...",
+            "url": "",
+            "emptyTable": "表中数据为空",
+            "loadingRecords": "载入中...",
+            "infoThousands": ",",
+            "paginate": {
+                "first": "首页",
+                "previous": "上页",
+                "next": "下页",
+                "last": "末页"
+            },
+            "aria": {
+                paginate: {
+                    first: '首页',
+                    previous: '上页',
+                    next: '下页',
+                    last: '末页'
+                },
+                "sortAscending": ": 以升序排列此列",
+                "sortDescending": ": 以降序排列此列"
+            },
+            "decimal": "-",
+            "thousands": "."
+        }
+    });
+
+    jQuery('.btn-create').on('click', function() {
+        jQuery.get('/waf/policy/list/?ptype=object', {}, function(response) {
+            if(response['data']) {
+                var objects = response['data'];
+                var select = jQuery('#dialog-create').find('select[name=object]');
+                select.empty();
+                var options = [];
+                for(var i = 0, len = objects.length; i < len; ++i) {
+                    var object = objects[i];
+                    options.push('<option value="%1%">%2%</option>'.replace('%1%', object['id']).replace('%2%', html_decode(object['name'])));
+                }
+                select.html(options.join(''));
+                select.trigger("chosen:updated");
+            }
+
+            jQuery('#dialog-create').modal({
+                'backdrop' : 'static',
+                'show' : true
+            });
+        }, 'json');
+    });
+
+    jQuery('.btn-save').on('click', function() {
+        var params = jQuery('.form-create').serializeArray();
+        jQuery.post('/waf/policy/create/?ptype=redirect', params, function(response) {
+            if(response['code'] == 200) {
+                jQuery('#dialog-create').modal('hide');
+                table.ajax.reload();
+            } else {
+                alert(response['result']);
+            }
+        }, 'json');
+    });
+
+    jQuery('.table-policy').on('click', '.btn-delete', function() {
+        var id = jQuery(this).data('id');
+        jQuery.post('/waf/policy/delete/?ptype=redirect', {'id' : id}, function(response) {
+            if(response['code'] == 200) {
+                table.ajax.reload();
+            } else {
+                alert(response['result']);
+            }
+        }, 'json');
+    });
+
+
+    jQuery('.table-policy').on('click', '.btn-view', function() {
+        var id = jQuery(this).data('id');
+        jQuery.get('/waf/policy/view/?ptype=redirect', {'id' : id}, function(presponse) {
+            if(presponse['code'] == 200) {
+                jQuery.get('/waf/policy/list/?ptype=object', {}, function(response) {
+                    if(response['data']) {
+                        var objects = response['data'];
+                        var select = jQuery('#dialog-view').find('select[name=object]');
+                        select.empty();
+                        var options = [];
+                        for(var i = 0, len = objects.length; i < len; ++i) {
+                            var object = objects[i];
+                            options.push('<option value="%1%" %3%>%2%</option>'.replace('%1%', object['id']).replace('%2%', html_decode(object['name'])));
+                        }
+                        select.html(options.join(''));
+                        select.trigger("chosen:updated");
+                    }
+
+                    for(var key in presponse['result']) {
+                        var value = presponse['result'][key];
+                        var tag = jQuery('#dialog-view').find('[name="' + key + '"]');
+                        if(tag.length > 0) {
+                            if(tag.is('select')) {
+                                tag.find('option').each(function() {
+                                    var selected = jQuery.isArray(value) ? jQuery.inArray(jQuery(this).val(), value) != -1: jQuery(this).val() == value;
+                                    if(selected) {
+                                        jQuery(this).attr('selected', 'selected');
+                                    } else {
+                                        jQuery(this).removeAttr('selected');
+                                    }
+                                })
+                                tag.trigger("chosen:updated");
+                            } else if(tag.is('input')) {
+                                if(tag.attr('type') == 'radio'){
+                                    tag.each(function() {
+                                        if(jQuery(this).val() == value) {
+                                            jQuery(this).attr('checked', 'checked');
+                                        } else {
+                                            jQuery(this).removeAttr('checked');
+                                        }
+                                    });
+                                } else {
+                                    tag.val(value);
+                                }
+                            }
+                        }
+                    }
+                    jQuery('#dialog-view').modal({
+                        'show' : true,
+                        'backdrop' : 'static'
+                    });
+                }, 'json');
+
+
+            } else {
+                alert(response['result']);
+            }
+        }, 'json');
+    });
+
+
+    jQuery('.btn-modify').on('click', function() {
+        var params = jQuery('.form-modify').serializeArray();
+        jQuery.post('/waf/policy/modify/?ptype=redirect', params, function(response) {
+            if(response['code'] == 200) {
+                jQuery('#dialog-view').modal('hide');
+                table.ajax.reload();
+            } else {
+                alert(response['result']);
+            }
+        }, 'json');
+    });
+});
+{-js-}

@@ -1,0 +1,49 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="profile-element logo-profile-element">
+                    WAF
+                </div>
+                <div class="logo-element">
+                    WAF
+                </div>
+            </li>
+            <li {* blocks.nav_dashboards *}>
+                <a href="/waf/index/"><i class="fa fa-th-large"></i> <span class="nav-label"> Dashboards </span></a>
+            </li>
+            <li {* blocks.nav_policy *}>
+                <a href="javascript:void(0);"><i class="fa fa-sitemap"></i> <span class="nav-label"> 策略 </span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li {* blocks.nav_policy_object *}>
+                        <a href="/waf/policy/object/"> 条件对象 </a>
+                    </li>
+                    <li {* blocks.nav_policy_behavior *}>
+                        <a href="javascript:void(0);"> 动作 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li {* blocks.nav_policy_redirect *}><a href="/waf/policy/redirect/"> 重定向 </a></li>
+                            <li {* blocks.nav_policy_rule *}><a href="/waf/policy/rule/"> 黑/白名单 </a></li>
+                            <li {* blocks.nav_policy_browser *}><a href="/waf/policy/browser/"> 浏览器验证 </a></li>
+                            <li {* blocks.nav_policy_rate_limit *}><a href="/waf/policy/rate_limit/"> 流量限速 </a></li>
+                            <li {* blocks.nav_policy_balance *}><a href="/waf/policy/balance/"> 负载均衡 </a></li>
+                            <li {* blocks.nav_policy_static *}><a href="/waf/policy/static/"> 静态资源 </a></li>
+                        </ul>
+                    </li>
+                    <li {* blocks.nav_policy_frequency *}>
+                        <a href="/waf/policy/frequency/"> 频度 </a>
+                    </li>
+                </ul>
+            </li>
+            <li {* blocks.nav_log *}>
+                <a href="javascript:void(0);"><i class="fa fa-diamond"></i> <span class="nav-label">告警 &amp; 日志</span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li {* blocks.nav_log_black *}><a href="/waf/log/black/"> 黑日志 </a></li>
+                    <li {* blocks.nav_log_white *}><a href="/waf/log/white/"> 白日志 </a></li>
+                    <li {* blocks.nav_log_gray *}><a href="/waf/log/gray/"> 灰日志 </a></li>
+                    <li {* blocks.nav_log_frequency *}><a href="/waf/log/frequency/"> 频度告警 </a></li>
+                    <li {* blocks.nav_log_access *}><a href="/waf/log/access/"> 访问日志 </a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
