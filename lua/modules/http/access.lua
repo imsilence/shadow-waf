@@ -11,6 +11,5 @@ local frequency = require 'modules.etl.action.access.frequency'
 frequency.run()
 
 
-
 local rate_limit = require 'modules.etl.action.access.rate_limit'
 rate_limit.run()
