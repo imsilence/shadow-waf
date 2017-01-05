@@ -69,4 +69,8 @@ _M.policy_frequency = function()
     template.render('policy_frequency.html')
 end
 
+_M.policy_balance = function()
+    template.render('policy_balance.html')
+end
+
 return _M

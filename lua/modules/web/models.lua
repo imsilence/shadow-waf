@@ -46,6 +46,30 @@ local parse_policy = function(ptype, args)
         end
         policy.conditions = conditions
         return policy
+    elseif ptype == 'loadbalance' then
+        local policy = {}
+        policy.id = args.id
+        policy.name = args.name
+        policy.type = args.type
+        policy.object = args.object
+        policy.enable = args.enable
+        local targets = {}
+        for _, v in ipairs({'scheme', 'ip', 'port', 'weight'}) do
+            if type(args[v]) ~= 'table' then
+                args[v] = {args[v]}
+            end
+        end
+        for i, k in ipairs(args.scheme) do
+            local target = {
+                    scheme = args.scheme[i],
+                    ip = args.ip[i],
+                    port = args.port[i],
+                    weight = args.weight[i],
+            }
+            targets[#targets + 1] = target
+        end
+        policy.targets = targets
+        return policy
     elseif ptype == 'frequency' then
         if type(args['keys']) ~= 'table' then
             args['keys'] = {args['keys']}

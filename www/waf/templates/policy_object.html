@@ -386,7 +386,33 @@ jQuery(document).ready(function() {
                             }
                         }
                     } else {
-                        jQuery('#dialog-view').find('[name="' + key + '"]').val(response['result'][key]);
+                        var value = response['result'][key];
+                        var tag = jQuery('#dialog-view').find('[name="' + key + '"]');
+                        if(tag.length > 0) {
+                            if(tag.is('select')) {
+                                tag.find('option').each(function() {
+                                    var selected = jQuery.isArray(value) ? jQuery.inArray(jQuery(this).val(), value) != -1: jQuery(this).val() == value;
+                                    if(selected) {
+                                        jQuery(this).attr('selected', 'selected');
+                                    } else {
+                                        jQuery(this).removeAttr('selected');
+                                    }
+                                })
+                                tag.trigger("chosen:updated");
+                            } else if(tag.is('input')) {
+                                if(tag.attr('type') == 'radio'){
+                                    tag.each(function() {
+                                        if(jQuery(this).val() == value) {
+                                            jQuery(this).attr('checked', 'checked');
+                                        } else {
+                                            jQuery(this).removeAttr('checked');
+                                        }
+                                    });
+                                } else {
+                                    tag.val(value);
+                                }
+                            }
+                        }
                     }
                 }
 

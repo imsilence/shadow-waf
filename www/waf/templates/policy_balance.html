@@ -10,9 +10,13 @@
 class="active"
 {-nav_policy-}
 
-{-nav_policy_frequency-}
+{-nav_policy_behavior-}
 class="active"
-{-nav_policy_frequency-}
+{-nav_policy_behavior-}
+
+{-nav_policy_balance-}
+class="active"
+{-nav_policy_balance-}
 
 {-breadcrumb-}
 <li>
@@ -27,7 +31,7 @@ class="active"
 </li>
 <li>
     <a class="active">
-        <strong>频度</strong>
+        <strong>浏览器验证</strong>
     </a>
 </li>
 {-breadcrumb-}
@@ -39,11 +43,10 @@ class="active"
 <table class="table-policy table table-striped table-bordered talbe-hover">
     <thead>
         <tr>
-            <th class="col-md-3">名称</th>
+            <th class="col-md-2">名称</th>
+            <th class="col-md-1">类型</th>
             <th class="col-md-3">对象</th>
-            <th class="col-md-2">合并对象</th>
-            <th class="col-md-1">时长</th>
-            <th class="col-md-1">阈值</th>
+            <th class="col-md-3">目标</th>
             <th class="col-md-1">状态</th>
             <th class="col-md-2">操作</th>
         </tr>
@@ -52,11 +55,11 @@ class="active"
 </table>
 
 <div class="modal fade" id="dialog-create" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">频度</h4>
+        <h4 class="modal-title" id="myModalLabel">负载均衡</h4>
       </div>
       <div class="modal-body">
         <form class="form-horizontal form-create">
@@ -67,6 +70,16 @@ class="active"
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-2 control-label">类型</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="type" data-placeholder="选择条件">
+                        <option value="random">随机</option>
+                        <option value="ip_hash">IP_HASH</option>
+                        <option value="url_hash">URL_HASH</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 control-label">条件对象</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="object" data-placeholder="选择条件">
@@ -74,34 +87,28 @@ class="active"
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">合并对象</label>
+                <label class="col-sm-2 control-label">目标</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="keys" data-placeholder="选择合并对象" multiple>
-                        <optgroup label="客户端">
-                            <option value="remote_addr">IP</option>
-                            <option value="user_agent">代理</option>
-                            <option value="referer">Referer</option>
-                        </optgroup>
-                        <optgroup label="服务器端">
-                            <option value="scheme">协议</option>
-                            <option value="host">主机名</option>
-                            <option value="port">端口</option>
-                            <option value="uri">路径</option>
-                            <option value="method">请求方式</option>
-                        </optgroup>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">时长间隔</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="interval" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">阈值</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="limit" />
+                    <div class="row" data-idx="0">
+                        <div class="col-sm-3">
+                            <select class="form-control" name="scheme">
+                                <option value="http">HTTP</option>
+                                <option value="https">HTTPS</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="ip" value="127.0.0.1"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" name="port" value="80"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" name="weight" value="1"/>
+                        </div>
+                        <div class="col-sm-1" style="padding-top: 8px;">
+                            <a href="javascript:void(0);" class="btn-target-create" data-idx='0'><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -127,11 +134,11 @@ class="active"
 
 
 <div class="modal fade" id="dialog-view" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">频度</h4>
+        <h4 class="modal-title" id="myModalLabel">负载均衡</h4>
       </div>
       <div class="modal-body">
         <form class="form-horizontal form-modify">
@@ -143,6 +150,16 @@ class="active"
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-2 control-label">类型</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="type" data-placeholder="选择条件">
+                        <option value="random">随机</option>
+                        <option value="ip_hash">IP_HASH</option>
+                        <option value="url_hash">URL_HASH</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 control-label">条件对象</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="object" data-placeholder="选择条件">
@@ -150,34 +167,28 @@ class="active"
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">合并对象</label>
+                <label class="col-sm-2 control-label">目标</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="keys" data-placeholder="选择合并对象" multiple>
-                        <optgroup label="客户端">
-                            <option value="remote_addr">IP</option>
-                            <option value="user_agent">代理</option>
-                            <option value="referer">Referer</option>
-                        </optgroup>
-                        <optgroup label="服务器端">
-                            <option value="scheme">协议</option>
-                            <option value="host">主机名</option>
-                            <option value="port">端口</option>
-                            <option value="uri">路径</option>
-                            <option value="method">请求方式</option>
-                        </optgroup>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">时长间隔</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="interval" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">阈值</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="limit" />
+                    <div class="row" data-idx="0">
+                        <div class="col-sm-3">
+                            <select class="form-control" name="scheme">
+                                <option value="http">HTTP</option>
+                                <option value="https">HTTPS</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="ip" value="127.0.0.1"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" name="port" value="80"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" name="weight" value="1"/>
+                        </div>
+                        <div class="col-sm-1" style="padding-top: 8px;">
+                            <a href="javascript:void(0);" class="btn-target-create" data-idx='0'><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -200,6 +211,31 @@ class="active"
     </div>
   </div>
 </div>
+
+
+<div class="hide target-template">
+    <div class="row" data-idx="%1%">
+        <div class="col-sm-3">
+            <select class="form-control" name="scheme">
+                <option value="http">HTTP</option>
+                <option value="https">HTTPS</option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="ip" value="127.0.0.1"/>
+        </div>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" name="port" value="80"/>
+        </div>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" name="weight" value="1"/>
+        </div>
+        <div class="col-sm-1" style="padding-top: 8px;">
+            <a href="javascript:void(0);" class="btn-target-create" data-idx='%1%'><i class="fa fa-plus"></i></a>
+            <a href="javascript:void(0);" class="btn-target-delete" data-idx='%1%'><i class="fa fa-minus"></i></a>
+        </div>
+    </div>
+</div>
 {-container-}
 
 {-script-}
@@ -210,18 +246,28 @@ class="active"
 {-js-}
 jQuery(document).ready(function() {
 
+    var target_tpl = jQuery('.target-template').html();
+
     jQuery('select').chosen({width: "100%"});
 
     var table = jQuery('.table-policy').DataTable({
         "dom" : '<"top"f>rt<"bottom"lp><"clear">',
         "ordering" : false,
-        "ajax": "/waf/policy/list/?ptype=frequency",
+        "ajax": "/waf/policy/list/?ptype=loadbalance",
         "columns": [
             {"data": function(row) {return html_decode(row["name"]);}},
+            {"data": function(row) {return html_decode(row["type"]);}},
             {"data": function(row) {return html_decode(row["object"]);}},
-            {"data": function(row) {return html_decode(row["keys"]);}},
-            {"data": function(row) {return html_decode(row["interval"]);}},
-            {"data": function(row) {return html_decode(row["limit"]);}},
+            {"data": function(row) {
+                var htmls = ['<ul>'];
+                for(var i=0, len=row['targets'].length; i < len; ++i) {
+                    var target = row['targets'][i];
+                    htmls.push('<li>%1%&nbsp;%2%&nbsp;%3%&nbsp;%4%</li>'.replace('%1%', html_decode(target["scheme"])).replace('%2%', html_decode(target['ip'])).replace('%3%', html_decode(target['port'])).replace('%4%', html_decode(target['weight'])));
+                }
+                htmls.push('</ul>')
+                return htmls.join('')
+
+            }},
             {"data": function(row) {return html_decode(row["enable"]);}},
             {
                 "data" : function(row) {
@@ -273,6 +319,8 @@ jQuery(document).ready(function() {
         if(bootstrapValidator) {
             bootstrapValidator.resetForm();
         }
+        jQuery('#dialog-create div.row[data-idx!=0]').remove();
+
         jQuery.get('/waf/policy/list/?ptype=object', {}, function(response) {
             if(response['data']) {
                 var objects = response['data'];
@@ -304,7 +352,7 @@ jQuery(document).ready(function() {
             }
         }
         var params = form.serializeArray();
-        jQuery.post('/waf/policy/create/?ptype=frequency', params, function(response) {
+        jQuery.post('/waf/policy/create/?ptype=loadbalance', params, function(response) {
             if(response['code'] == 200) {
                 jQuery('#dialog-create').modal('hide');
                 table.ajax.reload();
@@ -316,7 +364,7 @@ jQuery(document).ready(function() {
 
     jQuery('.table-policy').on('click', '.btn-delete', function() {
         var id = jQuery(this).data('id');
-        jQuery.post('/waf/policy/delete/?ptype=frequency', {'id' : id}, function(response) {
+        jQuery.post('/waf/policy/delete/?ptype=loadbalance', {'id' : id}, function(response) {
             if(response['code'] == 200) {
                 table.ajax.reload();
             } else {
@@ -333,7 +381,7 @@ jQuery(document).ready(function() {
             bootstrapValidator.resetForm();
         }
         var id = jQuery(this).data('id');
-        jQuery.get('/waf/policy/view/?ptype=frequency', {'id' : id}, function(presponse) {
+        jQuery.get('/waf/policy/view/?ptype=loadbalance', {'id' : id}, function(presponse) {
             if(presponse['code'] == 200) {
                 jQuery.get('/waf/policy/list/?ptype=object', {}, function(response) {
                     if(response['data']) {
@@ -343,41 +391,89 @@ jQuery(document).ready(function() {
                         var options = [];
                         for(var i = 0, len = objects.length; i < len; ++i) {
                             var object = objects[i];
-                            options.push('<option value="%1%" %3%>%2%</option>'.replace('%1%', object['id']).replace('%2%', html_decode(object['name'])));
+                            options.push('<option value="%1%">%2%</option>'.replace('%1%', object['id']).replace('%2%', html_decode(object['name'])));
                         }
                         select.html(options.join(''));
                         select.trigger("chosen:updated");
                     }
 
+                    jQuery('#dialog-view div.row[data-idx!=0]').remove();
                     for(var key in presponse['result']) {
-                        var value = presponse['result'][key];
-                        var tag = jQuery('#dialog-view').find('[name="' + key + '"]');
-                        if(tag.length > 0) {
-                            if(tag.is('select')) {
-                                tag.find('option').each(function() {
-                                    var selected = jQuery.isArray(value) ? jQuery.inArray(jQuery(this).val(), value) != -1: jQuery(this).val() == value;
-                                    if(selected) {
-                                        jQuery(this).attr('selected', 'selected');
-                                    } else {
-                                        jQuery(this).removeAttr('selected');
+                        if(key == 'targets') {
+                            console.log(presponse['result'][key].length)
+                            for(var i=0, len=presponse['result'][key].length; i < len; ++i) {
+                                var condition = presponse['result'][key][i];
+                                if(i > 0) {
+                                    var div_condition = jQuery(target_tpl.replace(/%1%/g, i));
+                                    var last_condition = jQuery('#dialog-view div.row[data-idx=' + (i - 1) + ']');
+                                    if(last_condition) {
+                                        div_condition.find('select').chosen({width: "100%"});
+                                        last_condition.after(div_condition);
                                     }
-                                })
-                                tag.trigger("chosen:updated");
-                            } else if(tag.is('input')) {
-                                if(tag.attr('type') == 'radio'){
-                                    tag.each(function() {
-                                        if(jQuery(this).val() == value) {
-                                            jQuery(this).attr('checked', 'checked');
-                                        } else {
-                                            jQuery(this).removeAttr('checked');
+                                }
+                                var div_condition = jQuery('#dialog-view div.row[data-idx=' + i + ']');
+                                if(div_condition.length > 0) {
+                                    for(var k in condition) {
+                                        var value = condition[k];
+                                        var tag = div_condition.find('[name="' + k + '"]');
+                                        if(tag.is('select')) {
+                                            tag.find('option').each(function() {
+                                                var selected = jQuery.isArray(value) ? jQuery.inArray(jQuery(this).val(), value) != -1: jQuery(this).val() == value;
+                                                if(selected) {
+                                                    jQuery(this).attr('selected', 'selected');
+                                                } else {
+                                                    jQuery(this).removeAttr('selected');
+                                                }
+                                            })
+                                            tag.trigger("chosen:updated");
+                                        } else if(tag.is('input')) {
+                                            if(tag.attr('type') == 'radio'){
+                                                tag.each(function() {
+                                                    if(jQuery(this).val() == value) {
+                                                        jQuery(this).attr('checked', 'checked');
+                                                    } else {
+                                                        jQuery(this).removeAttr('checked');
+                                                    }
+                                                });
+                                            } else {
+                                                tag.val(value);
+                                            }
                                         }
-                                    });
-                                } else {
-                                    tag.val(value);
+
+                                    }
+                                }
+                            }
+                        } else {
+                            var value = presponse['result'][key];
+                            var tag = jQuery('#dialog-view').find('[name="' + key + '"]');
+                            if(tag.length > 0) {
+                                if(tag.is('select')) {
+                                    tag.find('option').each(function() {
+                                        var selected = jQuery.isArray(value) ? jQuery.inArray(jQuery(this).val(), value) != -1: jQuery(this).val() == value;
+                                        if(selected) {
+                                            jQuery(this).attr('selected', 'selected');
+                                        } else {
+                                            jQuery(this).removeAttr('selected');
+                                        }
+                                    })
+                                    tag.trigger("chosen:updated");
+                                } else if(tag.is('input')) {
+                                    if(tag.attr('type') == 'radio'){
+                                        tag.each(function() {
+                                            if(jQuery(this).val() == value) {
+                                                jQuery(this).attr('checked', 'checked');
+                                            } else {
+                                                jQuery(this).removeAttr('checked');
+                                            }
+                                        });
+                                    } else {
+                                        tag.val(value);
+                                    }
                                 }
                             }
                         }
                     }
+
                     jQuery('#dialog-view').modal({
                         'show' : true,
                         'backdrop' : 'static'
@@ -403,7 +499,7 @@ jQuery(document).ready(function() {
         }
 
         var params = form.serializeArray();
-        jQuery.post('/waf/policy/modify/?ptype=frequency', params, function(response) {
+        jQuery.post('/waf/policy/modify/?ptype=loadbalance', params, function(response) {
             if(response['code'] == 200) {
                 jQuery('#dialog-view').modal('hide');
                 table.ajax.reload();
@@ -412,6 +508,36 @@ jQuery(document).ready(function() {
             }
         }, 'json');
     });
+
+
+    jQuery('form').on('click', '.btn-target-create', function() {
+        var curr_idx = parseInt(jQuery(this).data('idx'), 10);
+        var conditions = jQuery(this).parent().parent().parent();
+        var curr_condition = null;
+        var idx = 0;
+        jQuery(conditions).find('div.row[data-idx]').each(function() {
+            var data_idx = parseInt(jQuery(this).attr('data-idx'), 10);
+            if(data_idx >= idx) {
+                idx = data_idx;
+            }
+            if(data_idx == curr_idx) {
+                curr_condition = jQuery(this);
+            }
+        });
+        idx += 1;
+        var condition = jQuery(target_tpl.replace(/%1%/g, idx));
+        if(curr_condition) {
+            condition.find('select').chosen({width: "100%"});
+            curr_condition.after(condition);
+        }
+    });
+
+    jQuery('form').on('click', '.btn-target-delete', function() {
+        var condition = jQuery(this).parent().parent();
+        condition.find('select').chosen('destroy');
+        condition.remove();
+    });
+
 
     jQuery('form').bootstrapValidator({
         message: '输入不正确',
@@ -422,7 +548,7 @@ jQuery(document).ready(function() {
         },
         fields: {
             name: {
-                message: '名称不正确',
+                message: '名称输入不正确',
                 validators: {
                     notEmpty: {
                         message: '名称不能为空'
@@ -439,50 +565,10 @@ jQuery(document).ready(function() {
                 }
             },
             object: {
-                message: '条件对象不正确',
+                message: '条件对象不能为空',
                 validators: {
                     notEmpty: {
                         message: '条件对象不能为空'
-                    }
-                }
-            },
-            keys: {
-                message: '合并对象不正确',
-                validators: {
-                    notEmpty: {
-                        message: '合并对象不能为空'
-                    }
-                }
-            },
-            interval: {
-                message: '时间间隔不正确',
-                validators: {
-                    notEmpty: {
-                        message: '时间间隔不能为空'
-                    },
-                    integer: {
-                       message: '时间间隔必须为整数'
-                    },
-                    between: {
-                        min: 10,
-                        max: 86400,
-                        message: '时间间隔必须为10到86400的整数'
-                    }
-                }
-            },
-            limit: {
-                message: '阈值不正确',
-                validators: {
-                    notEmpty: {
-                        message: '阈值不能为空'
-                    },
-                    integer: {
-                       message: '阈值必须为整数'
-                    },
-                    between: {
-                        min: 3,
-                        max: 1000,
-                        message: '时间间隔必须为3到1000的整数'
                     }
                 }
             }
