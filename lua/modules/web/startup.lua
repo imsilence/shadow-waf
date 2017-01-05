@@ -3,6 +3,8 @@ local exit = ngx.exit
 local string_sub = string.sub
 local string_len = string.len
 local string_gsub = string.gsub
+local HTTP_OK = ngx.HTTP_OK
+local HTTP_NOT_FOUND = ngx.HTTP_NOT_FOUND
 
 local gconf = require 'modules.configs.gconf'
 local router = require 'modules.web.router'
@@ -18,7 +20,7 @@ local func = router[action]
 
 if func ~= nil then
     func()
-    exit(ngx.HTTP_OK)
+    exit(HTTP_OK)
 end
 
-exit(ngx.HTTP_NOT_FOUND)
+exit(HTTP_NOT_FOUND)
