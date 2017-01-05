@@ -12,7 +12,6 @@ local _M = {}
 _M._VERSION = 1.0
 
 _M.run = function()
-
     log(DEBUG, 'access loadbalance run')
     local rules = policy['policies']['loadbalance']
     local objects = policy['policies']['object']
@@ -21,12 +20,10 @@ _M.run = function()
         if rule['enable'] == 'true' then
             local condition = rule['object']
             if objects[condition] ~= nil and match(objects[condition]['conditions']) then
-                ngx.var.is_loadbalance = '1'
-                ngx.var.loadbalance_scheme = 'http'
-                ngx.var.loadbalance_ip = '127.0.0.1'
-                ngx.var.loadbalance_port = 8888
-                ngx.req.set_uri('/loadbalance', true)
-                ngx.exit(200)
+                 ngx.req.set_header('waf_loadbalance_scheme', 'http')
+                 ngx.req.set_header('waf_loadbalance_ip', '127.0.0.1')
+                 ngx.req.set_header('waf_loadbalance_port', '8080')
+                 return exec('@loadbalance')
             end
         end
     end

@@ -2,7 +2,7 @@ local log = ngx.log
 local DEBUG = ngx.DEBUG
 local ngx_var = ngx.var
 
-log(DEBUG, 'rewrite')
+log(DEBUG, 'access')
 
 local policy = require 'modules.configs.policy'
 policy.reload()
