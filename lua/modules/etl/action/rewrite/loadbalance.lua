@@ -2,11 +2,9 @@ local json = require 'modules.utils.json'
 local policy = require 'modules.configs.policy'
 local matcher = require 'modules.etl.match.matcher'
 
-local string_format = string.format
 local log = ngx.log
 local DEBUG = ngx.DEBUG
-local say = ngx.say
-local exit = ngx.exit
+local exec = ngx.exec
 
 local match = matcher.match
 
@@ -14,17 +12,21 @@ local _M = {}
 _M._VERSION = 1.0
 
 _M.run = function()
-    log(DEBUG, 'access filter run')
-    local rules = policy['policies']['rate_limit']
+
+    log(DEBUG, 'access loadbalance run')
+    local rules = policy['policies']['loadbalance']
     local objects = policy['policies']['object']
 
-    local response = policy['response']
-
-    for _, rule in ipairs(rules) do
+    for id, rule in ipairs(rules) do
         if rule['enable'] == 'true' then
             local condition = rule['object']
             if objects[condition] ~= nil and match(objects[condition]['conditions']) then
-                 ngx.var.limit_rate = string_format('%dK', tonumber(rule['target']))
+                ngx.var.is_loadbalance = '1'
+                ngx.var.loadbalance_scheme = 'http'
+                ngx.var.loadbalance_ip = '127.0.0.1'
+                ngx.var.loadbalance_port = 8888
+                ngx.req.set_uri('/loadbalance', true)
+                ngx.exit(200)
             end
         end
     end

@@ -1,4 +1,4 @@
-local json = require 'cjson'
+local json = require 'modules.utils.json'
 local policy = require 'modules.configs.policy'
 local matcher = require 'modules.etl.match.matcher'
 
