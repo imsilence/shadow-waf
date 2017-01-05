@@ -2,6 +2,7 @@ local json = require 'cjson'
 local policy = require 'modules.configs.policy'
 local matcher = require 'modules.etl.match.matcher'
 
+local string_format = string.format
 local log = ngx.log
 local DEBUG = ngx.DEBUG
 local say = ngx.say
@@ -23,7 +24,7 @@ _M.run = function()
         if rule['enable'] == 'true' then
             local condition = rule['object']
             if objects[condition] ~= nil and match(objects[condition]['conditions']) then
-                 ngx.var.limit_rate = tonumber(rule['target'])
+                 ngx.var.limit_rate = string_format('%dK', tonumber(rule['target']))
             end
         end
     end
