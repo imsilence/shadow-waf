@@ -1,7 +1,11 @@
+local request = require 'modules.utils.request'
+
 local log = ngx.log
 local DEBUG = ngx.DEBUG
 local string_format = string.format
 local ngx_re_find = ngx.re.find
+local get_args = request.get_args
+
 
 local _M = {}
 _M._VERSION = 1.0
@@ -10,10 +14,11 @@ local _funcs_match = {}
 local _funcs_judge = {}
 
 _M.match = function(condition)
+
     for _, k in ipairs(condition) do
         local func_name = string_format('_match_%s', k['object'])
         local func = _funcs_match[func_name]
-
+        local json = require 'cjson'
         if func ~= nil and func(k['operate'], k['target']) ~= true then
             return false
         end
@@ -72,13 +77,17 @@ _funcs_match._match_method = function(operate, target)
 end
 
 _funcs_match._match_args = function(operate, target)
-    local args = {}
-    for k, v in pairs(args) do
-        if _judge(v, operate, target) ~= true then
-            return false
+    local args = get_args()
+    if operate == 'exists' then
+        return _judge(args, operate, target)
+    else
+        for k, v in pairs(args) do
+            if _judge(v, operate, target) then
+                return true
+            end
         end
     end
-    return _judge(target, operate, args)
+    return false
 end
 
 _funcs_judge._judge_eq = function(value, target)
@@ -106,7 +115,7 @@ _funcs_judge._judge_regular = function(value, target)
 end
 
 _funcs_judge._judge_exists = function(value, target)
-    return value ~= nil and type(value) == 'table' and value.target ~= nil
+    return value ~= nil and type(value) == 'table' and value[target] ~= nil
 end
 
 return _M

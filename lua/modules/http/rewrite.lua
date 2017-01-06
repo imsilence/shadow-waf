@@ -6,7 +6,7 @@ log(DEBUG, 'access')
 
 local policy = require 'modules.configs.policy'
 policy.reload()
-
+do return end
 local redirect = require 'modules.etl.action.rewrite.redirect'
 redirect.run()
 
