@@ -2,7 +2,9 @@
 
 {-link-}
 <link href="/waf/static/inspinia/css/plugins/dataTables/datatables.min.css" rel="stylesheet"/>
-<link href="/waf/static/inspinia/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+<link href="/waf/static/inspinia/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet"/>
+<link href="/waf/static/inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+
 {-link-}
 
 
@@ -217,6 +219,8 @@ class="active"
 {-script-}
 <script src="/waf/static/inspinia/js/plugins/dataTables/datatables.min.js"></script>
 <script src="/waf/static/inspinia/js/plugins/chosen/chosen.jquery.js"></script>
+<script src="/waf/static/inspinia/js/plugins/sweetalert/sweetalert.min.js"></script>
+
 {-script-}
 
 {-js-}
@@ -312,22 +316,53 @@ jQuery(document).ready(function() {
         jQuery.post('/waf/policy/create/?ptype=object', params, function(response) {
             if(response['code'] == 200) {
                 jQuery('#dialog-create').modal('hide');
+                swal({
+                    title: html_decode('创建成功'),
+                    text: "",
+                    type: "success",
+                    timer: 2000,
+                });
                 table.ajax.reload();
             } else {
-                alert(response['result']);
+                swal({
+                    title: html_decode(response['result']),
+                    text: "",
+                    type: "error"
+                });
             }
         }, 'json');
     });
 
     jQuery('.table-policy').on('click', '.btn-delete', function() {
         var id = jQuery(this).data('id');
-        jQuery.post('/waf/policy/delete/?ptype=object', {'id' : id}, function(response) {
-            if(response['code'] == 200) {
-                table.ajax.reload();
-            } else {
-                alert(response['result']);
-            }
-        }, 'json');
+        swal({
+            title: "确定删除吗?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            cancelButtonText: "取消",
+            confirmButtonText: "删除",
+            closeOnConfirm: false
+        }, function () {
+            jQuery.post('/waf/policy/delete/?ptype=object', {'id' : id}, function(response) {
+                if(response['code'] == 200) {
+                    swal({
+                        title: html_decode('删除成功'),
+                        text: "",
+                        type: "success",
+                        timer: 2000,
+                    });
+                    table.ajax.reload();
+                } else {
+                    swal({
+                        title: html_decode(response['result']),
+                        text: "",
+                        type: "error"
+                    });
+                }
+            }, 'json');
+        });
     });
 
     jQuery('.table-policy').on('click', '.btn-view', function() {
@@ -421,7 +456,11 @@ jQuery(document).ready(function() {
                     'backdrop' : 'static'
                 });
             } else {
-                alert(response['result']);
+                swal({
+                    title: html_decode(response['result']),
+                    text: "",
+                    type: "error"
+                });
             }
         }, 'json');
     });
@@ -440,9 +479,19 @@ jQuery(document).ready(function() {
         jQuery.post('/waf/policy/modify/?ptype=object', params, function(response) {
             if(response['code'] == 200) {
                 jQuery('#dialog-view').modal('hide');
+                swal({
+                    title: html_decode('更新成功'),
+                    text: "",
+                    type: "success",
+                    timer: 2000,
+                });
                 table.ajax.reload();
             } else {
-                alert(response['result']);
+                swal({
+                    title: html_decode(response['result']),
+                    text: "",
+                    type: "error"
+                });
             }
         }, 'json');
     });
