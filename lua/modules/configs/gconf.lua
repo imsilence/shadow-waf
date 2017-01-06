@@ -17,7 +17,8 @@ _M.policy_files = {
     browser = 'browser.json',
     rate_limit = 'rate_limit.json',
     frequency = 'frequency.json',
-    loadbalance = 'loadbalance.json',
+    load_balance = 'load_balance.json',
+    static_resource = 'static_resource.json',
 }
 
 return _M

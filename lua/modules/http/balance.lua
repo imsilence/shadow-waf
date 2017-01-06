@@ -7,10 +7,10 @@ local HTTP_INTERNAL_SERVER_ERROR = ngx.HTTP_INTERNAL_SERVER_ERROR
 local log = ngx.log
 local DEBUG = ngx.DEBUG
 
-log(DEBUG, 'loadbalance')
+log(DEBUG, 'balance')
 
 local headers = ngx_req.get_headers()
-local ok, err = set_current_peer(headers['waf_loadbalance_ip'], tonumber(headers['waf_loadbalance_port']))
+local ok, err = set_current_peer(headers['waf_load_balance_ip'], tonumber(headers['waf_load_balance_port']))
 if not ok then
     return exit(HTTP_INTERNAL_SERVER_ERROR)
 end

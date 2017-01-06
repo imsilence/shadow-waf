@@ -13,5 +13,8 @@ frequency.run()
 local rate_limit = require 'modules.etl.action.access.rate_limit'
 rate_limit.run()
 
-local loadbalance = require 'modules.etl.action.access.loadbalance'
-loadbalance.run()
+local load_balance = require 'modules.etl.action.access.load_balance'
+load_balance.run()
+
+local static_resource = require 'modules.etl.action.access.static_resource'
+static_resource.run()

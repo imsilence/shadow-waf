@@ -73,4 +73,8 @@ _M.policy_balance = function()
     template.render('policy_balance.html')
 end
 
+_M.policy_static = function()
+    template.render('policy_static.html')
+end
+
 return _M

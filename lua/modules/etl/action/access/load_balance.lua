@@ -8,7 +8,6 @@ local exec = ngx.exec
 local ngx_time = ngx.time
 local randomseed = math.randomseed
 local random = math.random
-local fmod = math.fmod
 
 local match = matcher.match
 
@@ -40,8 +39,8 @@ local choose_target = function(type, targets)
 end
 
 _M.run = function()
-    log(DEBUG, 'access loadbalance run')
-    local rules = policy['policies']['loadbalance']
+    log(DEBUG, 'access load balance run')
+    local rules = policy['policies']['load_balance']
     local objects = policy['policies']['object']
 
     for id, rule in ipairs(rules) do
@@ -49,10 +48,10 @@ _M.run = function()
             local condition = rule['object']
             if objects[condition] ~= nil and match(objects[condition]['conditions']) then
                 local target = choose_target(rule['type'], rule['targets'])
-                ngx.req.set_header('waf_loadbalance_scheme', target['scheme'])
-                ngx.req.set_header('waf_loadbalance_ip', target['ip'])
-                ngx.req.set_header('waf_loadbalance_port', target['port'])
-                return exec('@loadbalance')
+                ngx.req.set_header('waf_load_balance_scheme', target['scheme'])
+                ngx.req.set_header('waf_load_balance_ip', target['ip'])
+                ngx.req.set_header('waf_load_balance_port', target['port'])
+                return exec('@waf_load_balance')
             end
         end
     end
