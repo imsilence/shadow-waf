@@ -22,9 +22,12 @@ _M.run = function()
 
     for _, rule in ipairs(rules) do
         if rule['enable'] == 'true' then
-            local condition = rule['object']
-            if objects[condition] ~= nil and match(objects[condition]['conditions']) then
-                 ngx.var.limit_rate = string_format('%dK', tonumber(rule['target']))
+            local rule_objects = rule['objects']
+            for _, rule_object in ipairs(rule_objects) do
+                if objects[rule_object] ~= nil and match(objects[rule_object]['conditions']) then
+                    ngx.var.limit_rate = string_format('%dK', tonumber(rule['target']))
+                    return true
+                end
             end
         end
     end

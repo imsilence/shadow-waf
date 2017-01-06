@@ -22,38 +22,41 @@ _M.run = function()
 
     for id, rule in ipairs(rules) do
         if rule['enable'] == 'true' then
-            local condition = rule['object']
-            if objects[condition] ~= nil and match(objects[condition]['conditions']) then
-                local interval = tonumber(rule['interval'])
-                local limit = tonumber(rule['limit'])
-                local ngx_var = ngx.var
+            local rule_objects = rule['objects']
+            for _, rule_object in ipairs(rule_objects) do
+                if objects[rule_object] ~= nil and match(objects[rule_object]['conditions']) then
 
-                local keys = rule['keys']
-                local cached_key = tostring(id)
-                for _, key in ipairs(keys) do
-                    if ngx_var[key] ~= nil then
-                        cached_key = cached_key .. ngx_var[key]
-                    end
-                end
-                local shard_frequency = ngx.shared.frequency
-                local count = shard_frequency:get(cached_key)
-                if count == nil then
-                    count = 0
-                    shard_frequency:set(cached_key, 0, interval)
-                end
-                shard_frequency:incr(cached_key, 1)
-                count = tonumber(count) + 1
+                    local interval = tonumber(rule['interval'])
+                    local limit = tonumber(rule['limit'])
+                    local ngx_var = ngx.var
 
-                if count > limit then
-                    if '' ~= response['text'] then
-                        say(response['text'])
-                        exit(200)
-                    else
-                        exit(response['code'])
+                    local keys = rule['keys']
+                    local cached_key = tostring(id)
+                    for _, key in ipairs(keys) do
+                        if ngx_var[key] ~= nil then
+                            cached_key = cached_key .. ngx_var[key]
+                        end
                     end
-                    return false
+                    local shard_frequency = ngx.shared.frequency
+                    local count = shard_frequency:get(cached_key)
+                    if count == nil then
+                        count = 0
+                        shard_frequency:set(cached_key, 0, interval)
+                    end
+                    shard_frequency:incr(cached_key, 1)
+                    count = tonumber(count) + 1
+
+                    if count > limit then
+                        if '' ~= response['text'] then
+                            say(response['text'])
+                            exit(200)
+                        else
+                            exit(response['code'])
+                        end
+                        return false
+                    end
+                    return true
                 end
-                return true
             end
         end
     end

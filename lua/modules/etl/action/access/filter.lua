@@ -21,18 +21,20 @@ _M.run = function()
 
     for _, rule in ipairs(rules) do
         if rule['enable'] == 'true' then
-            local condition = rule['object']
-            if objects[condition] ~= nil and match(objects[condition]['conditions']) then
-                if rule['action'] == 'drop' then
-                    if '' ~= response['text'] then
-                        say(response['text'])
-                        exit(200)
-                    else
-                        exit(response['code'])
+            local rule_objects = rule['objects']
+            for _, rule_object in ipairs(rule_objects) do
+                if objects[rule_object] ~= nil and match(objects[rule_object]['conditions']) then
+                    if rule['action'] == 'drop' then
+                        if '' ~= response['text'] then
+                            say(response['text'])
+                            exit(200)
+                        else
+                            exit(response['code'])
+                        end
+                        return false
+                    elseif rule['action'] == 'accept' then
+                        return true
                     end
-                    return false
-                elseif rule['action'] == 'accept' then
-                    return true
                 end
             end
         end

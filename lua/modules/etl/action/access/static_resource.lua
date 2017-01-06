@@ -18,11 +18,13 @@ _M.run = function()
 
     for id, rule in ipairs(rules) do
         if rule['enable'] == 'true' then
-            local condition = rule['object']
-            if objects[condition] ~= nil and match(objects[condition]['conditions']) then
-                ngx.req.set_header('waf_static_resource_root', rule['target'])
-                ngx.req.set_header('waf_static_resource_expires', rule['expires'])
-                return exec('@waf_static_resource')
+            local rule_objects = rule['objects']
+            for _, rule_object in ipairs(rule_objects) do
+                if objects[rule_object] ~= nil and match(objects[rule_object]['conditions']) then
+                    ngx.req.set_header('waf_static_resource_root', rule['target'])
+                    ngx.req.set_header('waf_static_resource_expires', rule['expires'])
+                    return exec('@waf_static_resource')
+                end
             end
         end
     end

@@ -45,9 +45,9 @@ class="active"
     <thead>
         <tr>
             <th class="col-md-2">名称</th>
-            <th class="col-md-2">对象</th>
             <th class="col-md-2">重定向</th>
             <th class="col-md-2">目标</th>
+            <th class="col-md-2">对象</th>
             <th class="col-md-1">状态</th>
             <th class="col-md-2">操作</th>
         </tr>
@@ -96,7 +96,7 @@ class="active"
             <div class="form-group">
                 <label class="col-sm-2 control-label">条件对象</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="object" data-placeholder="选择条件">
+                    <select class="form-control" name="objects" data-placeholder="选择条件" multiple="multiple">
                     </select>
                 </div>
             </div>
@@ -128,13 +128,6 @@ class="active"
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">条件对象</label>
-                <div class="col-sm-10">
-                    <select class="form-control" name="object" data-placeholder="选择条件">
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
                 <label class="col-sm-2 control-label">重定向</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="uri" />
@@ -144,6 +137,13 @@ class="active"
                 <label class="col-sm-2 control-label">目标</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="target" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">条件对象</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="objects" data-placeholder="选择条件" multiple="multiple">
+                    </select>
                 </div>
             </div>
             <div class="form-group">
@@ -185,9 +185,17 @@ jQuery(document).ready(function() {
         "ajax": "/waf/policy/list/?ptype=redirect",
         "columns": [
             {"data": function(row) {return html_decode(row["name"]);}},
-            {"data": function(row) {return html_decode(row["object"]);}},
             {"data": function(row) {return html_decode(row["uri"]);}},
             {"data": function(row) {return html_decode(row["target"]);}},
+            {"data": function(row) {
+                var htmls = ['<ul>'];
+                for(var i=0, len=row['objects'].length; i < len; ++i) {
+                    var object = row['objects'][i];
+                    htmls.push('<li>%1%</li>'.replace('%1%', html_decode(object)));
+                }
+                htmls.push('</ul>');
+                return htmls.join('');
+            }},
             {"data": function(row) {return html_decode(row["enable"]);}},
             {
                 "data" : function(row) {
@@ -243,7 +251,7 @@ jQuery(document).ready(function() {
         jQuery.get('/waf/policy/list/?ptype=object', {}, function(response) {
             if(response['data']) {
                 var objects = response['data'];
-                var select = jQuery('#dialog-create').find('select[name=object]');
+                var select = jQuery('#dialog-create').find('select[name=objects]');
                 select.empty();
                 var options = [];
                 for(var i = 0, len = objects.length; i < len; ++i) {
@@ -337,7 +345,7 @@ jQuery(document).ready(function() {
                 jQuery.get('/waf/policy/list/?ptype=object', {}, function(response) {
                     if(response['data']) {
                         var objects = response['data'];
-                        var select = jQuery('#dialog-view').find('select[name=object]');
+                        var select = jQuery('#dialog-view').find('select[name=objects]');
                         select.empty();
                         var options = [];
                         for(var i = 0, len = objects.length; i < len; ++i) {
@@ -441,9 +449,9 @@ jQuery(document).ready(function() {
                         message: '名称不能为空'
                     },
                     stringLength: {
-                        min: 6,
+                        min: 1,
                         max: 30,
-                        message: '名称必须为6到30个字符'
+                        message: '名称必须为1到30个字符'
                     },
                     regexp: {
                         regexp: /^[a-zA-Z0-9_]+$/,

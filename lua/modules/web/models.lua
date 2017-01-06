@@ -26,6 +26,10 @@ local gen_id = function()
 end
 
 local parse_policy = function(ptype, args)
+    if args['objects'] ~= nil and type(args['objects']) ~= 'table' then
+        args['objects'] = {args['objects']}
+    end
+
     if ptype == 'object' then
         local policy = {}
         policy.id = args.id
@@ -46,12 +50,12 @@ local parse_policy = function(ptype, args)
         end
         policy.conditions = conditions
         return policy
-    elseif ptype == 'loadbalance' then
+    elseif ptype == 'load_balance' then
         local policy = {}
         policy.id = args.id
         policy.name = args.name
         policy.type = args.type
-        policy.object = args.object
+        policy.objects = args.objects
         policy.enable = args.enable
         local targets = {}
         for _, v in ipairs({'scheme', 'ip', 'port', 'weight'}) do

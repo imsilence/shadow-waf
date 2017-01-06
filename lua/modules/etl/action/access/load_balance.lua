@@ -45,13 +45,15 @@ _M.run = function()
 
     for id, rule in ipairs(rules) do
         if rule['enable'] == 'true' then
-            local condition = rule['object']
-            if objects[condition] ~= nil and match(objects[condition]['conditions']) then
-                local target = choose_target(rule['type'], rule['targets'])
-                ngx.req.set_header('waf_load_balance_scheme', target['scheme'])
-                ngx.req.set_header('waf_load_balance_ip', target['ip'])
-                ngx.req.set_header('waf_load_balance_port', target['port'])
-                return exec('@waf_load_balance')
+            local rule_objects = rule['objects']
+            for _, rule_object in ipairs(rule_objects) do
+                if objects[rule_object] ~= nil and match(objects[rule_object]['conditions']) then
+                    local target = choose_target(rule['type'], rule['targets'])
+                    ngx.req.set_header('waf_load_balance_scheme', target['scheme'])
+                    ngx.req.set_header('waf_load_balance_ip', target['ip'])
+                    ngx.req.set_header('waf_load_balance_port', target['port'])
+                    return exec('@waf_load_balance')
+                end
             end
         end
     end

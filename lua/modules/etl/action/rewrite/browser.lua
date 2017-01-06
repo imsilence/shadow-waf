@@ -24,14 +24,17 @@ _M.run = function()
     for _, rule in ipairs(rules) do
         if rule['enable'] == 'true' then
             local condition = rule['object']
-            if objects[condition] ~= nil and match(objects[condition]['conditions']) then
-                if ngx.var.http_cookie ~= nil and string_find(ngx.var.http_cookie, waf_token) ~= nil then
-                    return true
+                local rule_objects = rule['objects']
+                for _, rule_object in ipairs(rule_objects) do
+                    if objects[rule_object] ~= nil and match(objects[rule_object]['conditions']) then
+                    if ngx.var.http_cookie ~= nil and string_find(ngx.var.http_cookie, waf_token) ~= nil then
+                        return true
+                    end
+                    local uri = string_format('%s://%s:%s%s', ngx.var.scheme, ngx.var.host, ngx.var.server_port, ngx.var.request_uri)
+                    ngx.header['Set-Cookie'] = {string_format('%s; path=/', waf_token)}
+                    redirect(uri, ngx.HTTP_MOVED_TEMPORARILY)
+                    return false
                 end
-                local uri = string_format('%s://%s:%s%s', ngx.var.scheme, ngx.var.host, ngx.var.server_port, ngx.var.request_uri)
-                ngx.header['Set-Cookie'] = {string_format('%s; path=/', waf_token)}
-                redirect(uri, ngx.HTTP_MOVED_TEMPORARILY)
-                return false
             end
         end
     end

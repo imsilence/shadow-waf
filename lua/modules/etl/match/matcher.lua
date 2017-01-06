@@ -1,6 +1,7 @@
 local log = ngx.log
 local DEBUG = ngx.DEBUG
 local string_format = string.format
+local ngx_re_find = ngx.re.find
 
 local _M = {}
 _M._VERSION = 1.0
@@ -101,7 +102,7 @@ _funcs_judge._judge_lte = function(value, target)
 end
 
 _funcs_judge._judge_regular = function(value, target)
-    return ngx.re.find(value, target, 'ijo') ~= nil
+    return ngx_re_find(value, target, 'ijo') ~= nil
 end
 
 _funcs_judge._judge_exists = function(value, target)
