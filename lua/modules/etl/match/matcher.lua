@@ -3,6 +3,7 @@ local request = require 'modules.utils.request'
 local log = ngx.log
 local DEBUG = ngx.DEBUG
 local string_format = string.format
+local string_upper = string.upper
 local ngx_re_find = ngx.re.find
 local get_args = request.get_args
 
@@ -73,7 +74,7 @@ _funcs_match._match_uri = function(operate, target)
 end
 
 _funcs_match._match_method = function(operate, target)
-    return _judge(ngx.var.request_method, operate, target)
+    return _judge(ngx.var.request_method, operate, string_upper(target))
 end
 
 _funcs_match._match_args = function(operate, target)
@@ -92,6 +93,10 @@ end
 
 _funcs_judge._judge_eq = function(value, target)
     return value == target
+end
+
+_funcs_judge._judge_neq = function(value, target)
+    return value ~= target
 end
 
 _funcs_judge._judge_gt = function(value, target)
@@ -114,8 +119,16 @@ _funcs_judge._judge_regular = function(value, target)
     return ngx_re_find(value, target, 'ijo') ~= nil
 end
 
+_funcs_judge._judge_nregular = function(value, target)
+    return ngx_re_find(value, target, 'ijo') == nil
+end
+
 _funcs_judge._judge_exists = function(value, target)
     return value ~= nil and type(value) == 'table' and value[target] ~= nil
+end
+
+_funcs_judge._judge_nexists = function(value, target)
+    return value == nil or type(value) ~= 'table' or value[target] == nil
 end
 
 return _M

@@ -153,65 +153,78 @@ jQuery(document).ready(function() {
 
     jQuery('select').chosen({width: "100%"});
 
-    var table = jQuery('.table-policy').DataTable({
-        "dom" : '<"top"f>rt<"bottom"lp><"clear">',
-        "ordering" : false,
-        "ajax": "/waf/policy/list/?ptype=browser",
-        "columns": [
-            {"data": function(row) {return html_decode(row["name"]);}},
-            {"data": function(row) {
-                var htmls = ['<ul>'];
-                for(var i=0, len=row['objects'].length; i < len; ++i) {
-                    var object = row['objects'][i];
-                    htmls.push('<li>%1%</li>'.replace('%1%', html_decode(object)));
+
+    var table = jQuery('.table-policy').on('preXhr.dt', function ( e, settings, data ) {
+            jQuery.get('/waf/policy/list/?ptype=object', {}, function(response) {
+                if(response['data']) {
+                    objects = {};
+                    for(var i=0, len = response['data'].length; i < len; ++i) {
+                        var object = response['data'][i];
+                        objects[object['id']] = object;
+                    }
                 }
-                htmls.push('</ul>');
-                return htmls.join('');
-            }},
-            {"data": function(row) {return html_decode(row["enable"]);}},
-            {
-                "data" : function(row) {
-                    var buttons = [];
-                    buttons.push('<button class="btn-view btn btn-warning btn-xs" data-id="%s">编辑</button>'.replace('%s', row['id']));
-                    buttons.push('<button class="btn-delete btn btn-danger btn-xs" data-id="%s">删除</button>'.replace('%s', row['id']));
-                    return buttons.join('&nbsp;');
+            }, 'json')
+        }).DataTable({
+            "dom" : '<"top"f>rt<"bottom"lp><"clear">',
+            "ordering" : false,
+            "ajax": "/waf/policy/list/?ptype=browser",
+            "columns": [
+                {"data": function(row) {return html_decode(row["name"]);}},
+                {"data": function(row) {
+                    var htmls = ['<ul>'];
+                    for(var i=0, len=row['objects'].length; i < len; ++i) {
+                        var object = row['objects'][i];
+                        if(objects[object]) {
+                            htmls.push('<li>%1%</li>'.replace('%1%', html_decode(objects[object]['name'])));
+                        }
+                    }
+                    htmls.push('</ul>');
+                    return htmls.join('');
+                }},
+                {"data": function(row) {return html_decode(row["enable"] == 'true' ? '启用' : '禁用' );}},
+                {
+                    "data" : function(row) {
+                        var buttons = [];
+                        buttons.push('<button class="btn-view btn btn-warning btn-xs" data-id="%s">编辑</button>'.replace('%s', row['id']));
+                        buttons.push('<button class="btn-delete btn btn-danger btn-xs" data-id="%s">删除</button>'.replace('%s', row['id']));
+                        return buttons.join('&nbsp;');
+                    }
                 }
-            }
-        ],
-        "language": {
-            "processing": "处理中...",
-            "lengthMenu": "显示 _MENU_ 项结果",
-            "zeroRecords": "没有匹配结果",
-            "info": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-            "infoEmpty": "显示第 0 至 0 项结果，共 0 项",
-            "infoFiltered": "(由 _MAX_ 项结果过滤)",
-            "infoPostFix": "",
-            "search": "搜索:",
-            "searchPlaceholder": "搜索...",
-            "url": "",
-            "emptyTable": "表中数据为空",
-            "loadingRecords": "载入中...",
-            "infoThousands": ",",
-            "paginate": {
-                "first": "首页",
-                "previous": "上页",
-                "next": "下页",
-                "last": "末页"
-            },
-            "aria": {
-                paginate: {
-                    first: '首页',
-                    previous: '上页',
-                    next: '下页',
-                    last: '末页'
+            ],
+            "language": {
+                "processing": "处理中...",
+                "lengthMenu": "显示 _MENU_ 项结果",
+                "zeroRecords": "没有匹配结果",
+                "info": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "infoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "infoFiltered": "(由 _MAX_ 项结果过滤)",
+                "infoPostFix": "",
+                "search": "搜索:",
+                "searchPlaceholder": "搜索...",
+                "url": "",
+                "emptyTable": "表中数据为空",
+                "loadingRecords": "载入中...",
+                "infoThousands": ",",
+                "paginate": {
+                    "first": "首页",
+                    "previous": "上页",
+                    "next": "下页",
+                    "last": "末页"
                 },
-                "sortAscending": ": 以升序排列此列",
-                "sortDescending": ": 以降序排列此列"
-            },
-            "decimal": "-",
-            "thousands": "."
-        }
-    });
+                "aria": {
+                    paginate: {
+                        first: '首页',
+                        previous: '上页',
+                        next: '下页',
+                        last: '末页'
+                    },
+                    "sortAscending": ": 以升序排列此列",
+                    "sortDescending": ": 以降序排列此列"
+                },
+                "decimal": "-",
+                "thousands": "."
+            }
+        });
 
     jQuery('.btn-create').on('click', function() {
         var form = jQuery('.form-create');
@@ -430,7 +443,7 @@ jQuery(document).ready(function() {
                     }
                 }
             },
-            object: {
+            objects: {
                 message: '条件对象不能为空',
                 validators: {
                     notEmpty: {

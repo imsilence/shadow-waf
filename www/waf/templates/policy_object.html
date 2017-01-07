@@ -36,8 +36,8 @@ class="active"
 <table class="table-policy table table-striped table-bordered talbe-hover">
     <thead>
         <tr>
-            <th class="col-md-3">名称</th>
-            <th class="col-md-1">条件</th>
+            <th class="col-md-4">名称</th>
+            <th class="col-md-6">条件</th>
             <th class="col-md-2">操作</th>
         </tr>
     </thead>
@@ -54,14 +54,14 @@ class="active"
       <div class="modal-body">
         <form class="form-horizontal form-create">
             <div class="form-group">
-                <label class="col-sm-2 control-label">名称</label>
-                <div class="col-sm-10">
+                <label class="col-sm-1 control-label">名称</label>
+                <div class="col-sm-11">
                     <input type="text" class="form-control" name="name"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">条件</label>
-                <div class="col-sm-10">
+                <label class="col-sm-1 control-label">条件</label>
+                <div class="col-sm-11">
                     <div class="row" data-idx="0">
                         <div class="col-sm-3">
                             <select class="form-control" name="object">
@@ -83,12 +83,15 @@ class="active"
                         <div class="col-sm-3">
                             <select class="form-control" name="operate">
                                 <option value="eq">等于</option>
+                                <option value="neq">不等于</option>
                                 <option value="gt">大于</option>
                                 <option value="gte">大于等于</option>
                                 <option value="lt">小于</option>
                                 <option value="lte">小于等于</option>
-                                <option value="regular">正则匹配</option>
+                                <option value="regular">匹配</option>
+                                <option value="nregular">不匹配</option>
                                 <option value="exists">存在</option>
+                                <option value="nexists">不存在</option>
                             </select>
                         </div>
                         <div class="col-sm-5">
@@ -122,14 +125,14 @@ class="active"
         <form class="form-horizontal form-modify">
             <input type="hidden" name="id" />
             <div class="form-group">
-                <label class="col-sm-2 control-label">名称</label>
-                <div class="col-sm-10">
+                <label class="col-sm-1 control-label">名称</label>
+                <div class="col-sm-11">
                     <input type="text" class="form-control" name="name"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">条件</label>
-                <div class="col-sm-10">
+                <label class="col-sm-1 control-label">条件</label>
+                <div class="col-sm-11">
                     <div class="row" data-idx="0">
                         <div class="col-sm-3">
                             <select class="form-control" name="object">
@@ -151,12 +154,15 @@ class="active"
                         <div class="col-sm-3">
                             <select class="form-control" name="operate">
                                 <option value="eq">等于</option>
+                                <option value="neq">不等于</option>
                                 <option value="gt">大于</option>
                                 <option value="gte">大于等于</option>
                                 <option value="lt">小于</option>
                                 <option value="lte">小于等于</option>
-                                <option value="regular">正则匹配</option>
+                                <option value="regular">匹配</option>
+                                <option value="nregular">不匹配</option>
                                 <option value="exists">存在</option>
+                                <option value="nexists">不存在</option>
                             </select>
                         </div>
                         <div class="col-sm-5">
@@ -200,11 +206,15 @@ class="active"
         <div class="col-sm-3">
             <select class="form-control" name="operate">
                 <option value="eq">等于</option>
+                <option value="neq">不等于</option>
                 <option value="gt">大于</option>
                 <option value="gte">大于等于</option>
                 <option value="lt">小于</option>
                 <option value="lte">小于等于</option>
-                <option value="regular">正则匹配</option>
+                <option value="regular">匹配</option>
+                <option value="nregular">不匹配</option>
+                <option value="exists">存在</option>
+                <option value="nexists">不存在</option>
             </select>
         </div>
         <div class="col-sm-5">

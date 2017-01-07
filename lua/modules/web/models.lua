@@ -36,7 +36,9 @@ local parse_policy = function(ptype, args)
         policy.name = args.name
         local conditions = {}
         for _, v in ipairs({'object', 'operate', 'target'}) do
-            if type(args[v]) ~= 'table' then
+            if args[v] == nil then
+                args[v] = {}
+            elseif type(args[v]) ~= 'table' then
                 args[v] = {args[v]}
             end
         end
@@ -51,6 +53,9 @@ local parse_policy = function(ptype, args)
         policy.conditions = conditions
         return policy
     elseif ptype == 'load_balance' then
+        if args['objects'] == nil then
+            args['objects'] = {}
+        end
         local policy = {}
         policy.id = args.id
         policy.name = args.name
@@ -59,7 +64,9 @@ local parse_policy = function(ptype, args)
         policy.enable = args.enable
         local targets = {}
         for _, v in ipairs({'scheme', 'ip', 'port', 'weight'}) do
-            if type(args[v]) ~= 'table' then
+            if args[v] == nil then
+                args[v] = {}
+            elseif type(args[v]) ~= 'table' then
                 args[v] = {args[v]}
             end
         end
@@ -75,8 +82,20 @@ local parse_policy = function(ptype, args)
         policy.targets = targets
         return policy
     elseif ptype == 'frequency' then
+        for _, v in ipairs({'objects', 'keys'}) do
+            if args[v] == nil then
+                args[v] = {}
+            end
+        end
+
         if type(args['keys']) ~= 'table' then
             args['keys'] = {args['keys']}
+        end
+    else
+        for _, v in ipairs({'objects'}) do
+            if args[v] == nil then
+                args[v] = {}
+            end
         end
     end
     return args
